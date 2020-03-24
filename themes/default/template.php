@@ -15,22 +15,15 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 
 {*//external css files *}
-	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/bootstrap/css/bootstrap.min.css'>
-	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/bootstrap/css/bootstrap-tempusdominus.css'>
-	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/bootstrap/css/bootstrap-colorpicker.min.css'>
-	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/fontawesome/css/all.css'>
+	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/bootstrap/css/bootstrap.min.css.php'>
+	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/bootstrap/css/bootstrap-tempusdominus.min.css.php'>
+	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/bootstrap/css/bootstrap-colorpicker.min.css.php'>
+	<link rel='stylesheet' type='text/css' href='{$project_path}/resources/fontawesome/css/all.min.css.php'>
 	<link rel='stylesheet' type='text/css' href='{$project_path}/themes/default/css.php'>
 
 {*//link to custom css file *}
 	{if $settings.theme.custom_css}
-		<link rel='stylesheet' type='text/css' href='$settings.theme.custom_css'>
-	{/if}
-
-{*//output custom css *}
-	{if $settings.theme.custom_css_code}
-		<style>
-		$settings.theme.custom_css_code
-		</style>
+		<link rel='stylesheet' type='text/css' href='{$settings.theme.custom_css}'>
 	{/if}
 
 {*//set favorite icon *}
@@ -40,15 +33,15 @@
 	<title>{$document_title}</title>
 
 {*//remote javascript *}
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/jquery/jquery-3.4.1.min.js'></script>
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/jquery/jquery.autosize.input.js'></script>
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/momentjs/moment-with-locales.min.js'></script>
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap.min.js'></script>
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap-tempusdominus.min.js'></script>
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap-colorpicker.js'></script>
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap-pwstrength.min.js'></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/jquery/jquery.min.js.php'></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/jquery/jquery.autosize.input.js.php'></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/momentjs/moment-with-locales.min.js.php'></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap.min.js.php'></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap-tempusdominus.min.js.php'></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap-colorpicker.min.js.php'></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/bootstrap/js/bootstrap-pwstrength.min.js.php'></script>
 	<script language='JavaScript' type='text/javascript'>{literal}window.FontAwesomeConfig = { autoReplaceSvg: false }{/literal}</script>
-	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/fontawesome/js/all.js' defer></script>
+	<script language='JavaScript' type='text/javascript' src='{$project_path}/resources/fontawesome/js/solid.min.js.php' defer></script>
 
 {*//web font loader *}
 	{if $settings.theme.font_loader == 'true'}
@@ -167,7 +160,7 @@
 	$(document).ready(function() {
 		{/literal}
 
-		// echo message::html(true, '		');
+		{$messages}
 
 		//message bar hide on hover
 			{literal}
@@ -219,31 +212,35 @@
 		//keyboard shortcut scripts
 
 		//key: [enter] - retain default behavior to submit form, when present - note: safari does not honor the first submit element when hiding it using 'display: none;' in the setAttribute method
-			{literal}
-			var action_bar_actions, first_form, first_submit;
-			action_bar_actions = document.querySelector('div#action_bar.action_bar > div.actions');
-			first_form = document.querySelector('form#frm');
+			{if $settings.theme.keyboard_shortcut_submit_enabled}
+				{literal}
+				var action_bar_actions, first_form, first_submit;
+				action_bar_actions = document.querySelector('div#action_bar.action_bar > div.actions');
+				first_form = document.querySelector('form#frm');
 
-			if (action_bar_actions !== null) {
-				if (first_form !== null) {
-					first_submit = document.createElement('input');
-					first_submit.type = 'submit';
-					first_submit.id = 'default_submit';
-					first_submit.setAttribute('style','position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;');
-					first_form.prepend(first_submit);
-					window.addEventListener('keydown',function(e){
-						if (e.which == 13 && (e.target.tagName == 'INPUT' || e.target.tagName == 'SELECT')) {
-							if (typeof window.submit_form === 'function') { submit_form(); }
-							else { document.getElementById('frm').submit(); }
-						}
-					});
+				if (action_bar_actions !== null) {
+					if (first_form !== null) {
+						first_submit = document.createElement('input');
+						first_submit.type = 'submit';
+						first_submit.id = 'default_submit';
+						first_submit.setAttribute('style','position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;');
+						first_form.prepend(first_submit);
+						window.addEventListener('keydown',function(e){
+							if (e.which == 13 && (e.target.tagName == 'INPUT' || e.target.tagName == 'SELECT')) {
+								if (typeof window.submit_form === 'function') { submit_form(); }
+								else { document.getElementById('frm').submit(); }
+							}
+						});
+					}
 				}
-			}
-			{/literal}
+				{/literal}
+			{/if}
 
 		//common (used by delete and toggle)
-			var list_checkboxes;
-			list_checkboxes = document.querySelectorAll('table.list tr.list-row td.checkbox input[type=checkbox]');
+			{if $settings.theme.keyboard_shortcut_delete_enabled || $settings.theme.keyboard_shortcut_toggle_enabled}
+				var list_checkboxes;
+				list_checkboxes = document.querySelectorAll('table.list tr.list-row td.checkbox input[type=checkbox]');
+			{/if}
 
 		//keyup event listener
 			{literal}
@@ -286,40 +283,44 @@
 					{/literal}
 
 				//key: [insert], list: to add
-					{literal}
-					if (e.which == 45 && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
-						e.preventDefault();
-						var list_add_button;
-						list_add_button = document.getElementById('btn_add');
-						if (list_add_button === null || list_add_button === 'undefined') {
-							list_add_button = document.querySelector('button[name=btn_add]');
+					{if $settings.theme.keyboard_shortcut_add_enabled}
+						{literal}
+						if (e.which == 45 && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
+							e.preventDefault();
+							var list_add_button;
+							list_add_button = document.getElementById('btn_add');
+							if (list_add_button === null || list_add_button === 'undefined') {
+								list_add_button = document.querySelector('button[name=btn_add]');
+							}
+							if (list_add_button !== null) { list_add_button.click(); }
 						}
-						if (list_add_button !== null) { list_add_button.click(); }
-					}
-					{/literal}
+						{/literal}
+					{/if}
 
 				//key: [delete], list: to delete checked, edit: to delete
-					{literal}
-					if (e.which == 46 && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
-						e.preventDefault();
-						if (list_checkboxes.length !== 0) {
-							var list_delete_button;
-							list_delete_button = document.querySelector('button[name=btn_delete]');
-							if (list_delete_button === null || list_delete_button === 'undefined') {
-								list_delete_button = document.getElementById('btn_delete');
+					{if $settings.theme.keyboard_shortcut_delete_enabled}
+						{literal}
+						if (e.which == 46 && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
+							e.preventDefault();
+							if (list_checkboxes.length !== 0) {
+								var list_delete_button;
+								list_delete_button = document.querySelector('button[name=btn_delete]');
+								if (list_delete_button === null || list_delete_button === 'undefined') {
+									list_delete_button = document.getElementById('btn_delete');
+								}
+								if (list_delete_button !== null) { list_delete_button.click(); }
 							}
-							if (list_delete_button !== null) { list_delete_button.click(); }
-						}
-						else {
-							var edit_delete_button;
-							edit_delete_button = document.querySelector('button[name=btn_delete]');
-							if (edit_delete_button === null || edit_delete_button === 'undefined') {
-								edit_delete_button = document.getElementById('btn_delete');
+							else {
+								var edit_delete_button;
+								edit_delete_button = document.querySelector('button[name=btn_delete]');
+								if (edit_delete_button === null || edit_delete_button === 'undefined') {
+									edit_delete_button = document.getElementById('btn_delete');
+								}
+								if (edit_delete_button !== null) { edit_delete_button.click(); }
 							}
-							if (edit_delete_button !== null) { edit_delete_button.click(); }
 						}
-					}
-					{/literal}
+						{/literal}
+					{/if}
 
 		//keyup end
 			{literal}
@@ -332,76 +333,84 @@
 				{/literal}
 
 				//key: [space], list: to toggle checked - note: for default [space] checkbox behavior (ie. toggle focused checkbox) include in the if statement: && !(e.target.tagName == 'INPUT' && e.target.type == 'checkbox')
-					{literal}
-					if (e.which == 32 && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA' && list_checkboxes.length !== 0) {
-						e.preventDefault();
-						var list_toggle_button;
-						list_toggle_button = document.querySelector('button[name=btn_toggle]');
-						if (list_toggle_button === null || list_toggle_button === 'undefined') {
-							list_toggle_button = document.getElementById('btn_toggle');
-						}
-						if (list_toggle_button !== null) { list_toggle_button.click(); }
-					}
-					{/literal}
-
-				//key: [ctrl]+[a], list,edit: to check all
-					{literal}
-					if ((((e.which == 97 || e.which == 65) && (e.ctrlKey || e.metaKey) && !e.shiftKey) || e.which == 19) && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
-						var list_checkbox_all;
-						list_checkbox_all = document.querySelectorAll('table.list tr.list-header th.checkbox input[name=checkbox_all]');
-						if (list_checkbox_all !== null && list_checkbox_all.length > 0) {
-							e.preventDefault();
-							for (var x = 0, max = list_checkbox_all.length; x < max; x++) {
-								list_checkbox_all[x].click();
-							}
-						}
-						var edit_checkbox_all;
-						edit_checkbox_all = document.querySelectorAll('td.edit_delete_checkbox_all > span > input[name=checkbox_all]');
-						if (edit_checkbox_all !== null && edit_checkbox_all.length > 0) {
-							e.preventDefault();
-							for (var x = 0, max = edit_checkbox_all.length; x < max; x++) {
-								edit_checkbox_all[x].click();
-							}
-						}
-					}
-					{/literal}
-
-				//key: [ctrl]+[s], edit: to save
-					{literal}
-					if (((e.which == 115 || e.which == 83) && (e.ctrlKey || e.metaKey) && !e.shiftKey) || (e.which == 19)) {
-						e.preventDefault();
-						var edit_save_button;
-						edit_save_button = document.getElementById('btn_save');
-						if (edit_save_button === null || edit_save_button === 'undefined') {
-							edit_save_button = document.querySelector('button[name=btn_save]');
-						}
-						if (edit_save_button !== null) { edit_save_button.click(); }
-					}
-					{/literal}
-
-				//key: [ctrl]+[c], list,edit: to copy
-					{if $browser_name_short == 'Safari'} //emulate with detecting [c] only, as [command] and [control] keys are ignored when captured
+					{if $settings.theme.keyboard_shortcut_toggle_enabled}
 						{literal}
-						if ((e.which == 99 || e.which == 67) && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
-						{/literal}
-					{else}
-						{literal}
-						if ((((e.which == 99 || e.which == 67) && (e.ctrlKey || e.metaKey) && !e.shiftKey) || (e.which == 19)) && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
+						if (e.which == 32 && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA' && list_checkboxes.length !== 0) {
+							e.preventDefault();
+							var list_toggle_button;
+							list_toggle_button = document.querySelector('button[name=btn_toggle]');
+							if (list_toggle_button === null || list_toggle_button === 'undefined') {
+								list_toggle_button = document.getElementById('btn_toggle');
+							}
+							if (list_toggle_button !== null) { list_toggle_button.click(); }
+						}
 						{/literal}
 					{/if}
-					{literal}
-						var current_selection, copy_button;
-						current_selection = window.getSelection();
-						if (current_selection === null || current_selection == 'undefined' || current_selection.toString() == '') {
-							e.preventDefault();
-							copy_button = document.getElementById('btn_copy');
-							if (copy_button === null || copy_button === 'undefined') {
-								copy_button = document.querySelector('button[name=btn_copy]');
+
+				//key: [ctrl]+[a], list,edit: to check all
+					{if $settings.theme.keyboard_shortcut_check_all_enabled}
+						{literal}
+						if ((((e.which == 97 || e.which == 65) && (e.ctrlKey || e.metaKey) && !e.shiftKey) || e.which == 19) && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
+							var list_checkbox_all;
+							list_checkbox_all = document.querySelectorAll('table.list tr.list-header th.checkbox input[name=checkbox_all]');
+							if (list_checkbox_all !== null && list_checkbox_all.length > 0) {
+								e.preventDefault();
+								for (var x = 0, max = list_checkbox_all.length; x < max; x++) {
+									list_checkbox_all[x].click();
+								}
 							}
-							if (copy_button !== null) { copy_button.click(); }
+							var edit_checkbox_all;
+							edit_checkbox_all = document.querySelectorAll('td.edit_delete_checkbox_all > span > input[name=checkbox_all]');
+							if (edit_checkbox_all !== null && edit_checkbox_all.length > 0) {
+								e.preventDefault();
+								for (var x = 0, max = edit_checkbox_all.length; x < max; x++) {
+									edit_checkbox_all[x].click();
+								}
+							}
 						}
-					}
-					{/literal}
+						{/literal}
+					{/if}
+
+				//key: [ctrl]+[s], edit: to save
+					{if $settings.theme.keyboard_shortcut_check_save_enabled}
+						{literal}
+						if (((e.which == 115 || e.which == 83) && (e.ctrlKey || e.metaKey) && !e.shiftKey) || (e.which == 19)) {
+							e.preventDefault();
+							var edit_save_button;
+							edit_save_button = document.getElementById('btn_save');
+							if (edit_save_button === null || edit_save_button === 'undefined') {
+								edit_save_button = document.querySelector('button[name=btn_save]');
+							}
+							if (edit_save_button !== null) { edit_save_button.click(); }
+						}
+						{/literal}
+					{/if}
+
+				//key: [ctrl]+[c], list,edit: to copy
+					{if $settings.theme.keyboard_shortcut_check_copy_enabled}
+						{if $browser_name_short == 'Safari'} //emulate with detecting [c] only, as [command] and [control] keys are ignored when captured
+							{literal}
+							if ((e.which == 99 || e.which == 67) && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
+							{/literal}
+						{else}
+							{literal}
+							if ((((e.which == 99 || e.which == 67) && (e.ctrlKey || e.metaKey) && !e.shiftKey) || (e.which == 19)) && !(e.target.tagName == 'INPUT' && e.target.type == 'text') && e.target.tagName != 'TEXTAREA') {
+							{/literal}
+						{/if}
+						{literal}
+							var current_selection, copy_button;
+							current_selection = window.getSelection();
+							if (current_selection === null || current_selection == 'undefined' || current_selection.toString() == '') {
+								e.preventDefault();
+								copy_button = document.getElementById('btn_copy');
+								if (copy_button === null || copy_button === 'undefined') {
+									copy_button = document.querySelector('button[name=btn_copy]');
+								}
+								if (copy_button !== null) { copy_button.click(); }
+							}
+						}
+						{/literal}
+					{/if}
 
 		//keydown end
 			{literal}
@@ -803,8 +812,6 @@
 							{*//set active domain color *}
 								{if $domain_active_background_color != ''}
 									{if $row.domain_uuid == $domain_uuid}{$background_color=$domain_active_background_color}{/if}
-								{else}
-									{if $row.domain_uuid == $domain_uuid}{$background_color='#eeffee'}{/if}
 								{/if}
 							{*//active domain text hover color *}
 								{if $settings.theme.domain_active_text_color_hover != '' && $row.domain_uuid == $domain_uuid}
@@ -864,11 +871,21 @@
 			</td></tr></table>
 		</div>
 
-	{*//logged in *}
-		{if $authenticated}
+	{*//login page *}
+		{if $login_page}
+			<div id='default_login'>
+				<a href='{$project_path}/'><img id='login_logo' style='width: {$login_logo_width}; height: {$login_logo_height};' src='{$login_logo_source}'></a><br />
+				{$document_body}
+			</div>
+			<div id='footer_login'>
+				<span class='footer'>{$settings.theme.footer}</span>
+			</div>
+
+	{*//other pages *}
+		{else}
 			{if $settings.theme.menu_style == 'side' || $settings.theme.menu_style == 'inline' || $settings.theme.menu_style == 'static'}
-				{if $settings.theme.menu_style == 'inline'}{$logo}{/if}
 				{$container_open}
+				{if $settings.theme.menu_style == 'inline'}{$logo}{/if}
 				{$menu}
 				{if $settings.theme.menu_style == 'inline' || $settings.theme.menu_style == 'static'}<br />{/if}
 			{else} {*//default: fixed *}
@@ -882,16 +899,6 @@
 				<span class='footer'>{$settings.theme.footer}</span>
 			</div>
 			{$container_close}
-
-	{*//not logged in *}
-		{else}
-			<div id='default_login'>
-				<a href='{$project_path}/'><img id='login_logo' style='width: {$login_logo_width}; height: {$login_logo_height};' src='{$login_logo_source}'></a><br />
-				{$document_body}
-			</div>
-			<div id='footer_login'>
-				<span class='footer'>{$settings.theme.footer}</span>
-			</div>
 		{/if}
 
 </body>
